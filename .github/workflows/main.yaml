@@ -19,6 +19,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Run Build
-        run: ~/BUILD.sh
+        run: ./BUILD.sh
 
       - name: Run Test
+        run: ./TEST.sh          
