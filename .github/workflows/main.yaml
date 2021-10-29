@@ -18,6 +18,13 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+
+      - name: Permission Build.sh
+      - run: chmod 777 Build.sh
+
+      - name: Permission Test.sh
+      - run: chmod 777 Test.sh
+
       - name: Run Build
         run: ./BUILD.sh
 
