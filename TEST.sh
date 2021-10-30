@@ -13,7 +13,7 @@ expected[5]="the 2${n}brown 1${n}dog 1${n}fox 1${n}jumps 1${n}lazy 1${n}over 1${
 expected[6]="the 2${n}brown 1${n}dog 1${n}fox 1${n}jumps 1${n}lazy 1${n}over 1${n}quick 1"
 
 successful=0
-failed=1
+failed=0
 
 for (( i=1; i <= 6; i++ ))
 do

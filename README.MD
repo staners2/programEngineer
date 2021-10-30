@@ -1,6 +1,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/staners2/programEngineer)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/staners2/programEngineer)
 ![GitHub top language](https://img.shields.io/github/languages/top/staners2/programEngineer)
+![example workflow](https://github.com/staners2/programEngineer/actions/workflows/main.yaml/badge.svg)
 
 # FAQ #
 ## Необходимые инструменты ##
