@@ -22,6 +22,7 @@ enum class Roles() {
 
 * Создать объект **РольРесурс**
 ```kotlin
+// {user resourse role}
 class RoleResourses {
     TODO ...
 }
@@ -30,14 +31,13 @@ class RoleResourses {
 * Создать объект **Аргумент**
 ```kotlin
 data class Arguments(
-    val h: Bool,
     val login: String?,
     val password: String?,
     val role: String?,
     val resourse: String?,
     val ds: String?,
     val de: String?,
-    val vol: String?
+    val vol: Int?
 )
 ```
 
@@ -55,11 +55,22 @@ enum class CodeExecute(val statusCode: Int){
 }
 ```
 
-* Создать объект **БазыДанных**
+* Создать объект **БазаДанныхПровайдер**
 ```kotlin
-class DataBase {
-    private val roleResourses: List<RoleResourses> = listOf(...)
-    private val users: List<User> = listOf(...)
+import SourseData.*
+
+class DataBaseProvider(val sourseData: SourseData) {
+    
+}
+```
+
+* Создать объект **ИсточникДанных**
+```kotlin
+package SourseData
+
+class SourseData {
+    public val roleResourses: List<RoleResourses> = listOf(...)
+    public val users: List<User> = listOf(...)
 }
 ```
 
@@ -67,6 +78,11 @@ class DataBase {
 ```kotlin
 // Для аутентификации (логин + pass)
 class AuthenticationProvider {
+
+    companion object {
+
+    }
+
     TODO ...
 }
 ```
@@ -79,11 +95,14 @@ class AuthorizeProvider {
 }
 ```
 
+
+
 * Создать объект **Утилит**
 ```kotlin
 // Для хеширования паролей
 import java.security.MessageDigest
 import kotlin.random.Random
+import kotlinx.cli.*
 
 class Utils {
     companion object {
@@ -94,12 +113,12 @@ class Utils {
 
 
 # Методы объектов
-## Объект: **База Данных** 
+## Объект: **База Данных Провайдер** 
 
 * Метод: Возвращающий объект пользователя по логину
 ```kotlin
 fun getUserByLogin(login: String): User? {
-    return users.find { it.login == login }
+    return sourseData.users.find { it.login == login }
 }
 ```
 
@@ -112,7 +131,7 @@ fun getPasswordByLogin(login: String): String {
 
 * Метод: Возвращающий соль по логину
 ```kotlin
-fun getSaltByLogin(login: String): String {
+fun getSaltByLogin(login: String): String {  
     return getUserByLogin(login)!!.salt
 }
 ```
@@ -125,18 +144,69 @@ fun hasLogin(login: String): Boolean {
 ```
 
 ## Объект: **АутентификацииПровайдер** 
+
+* Метод: Начать Аутентификацию
+```kotlin
+fun authenticate(login: String, password: String): User {
+    if (!loginValidate(login)){
+        print("...")
+        System.exit(CodeExecute.NOT_FORMAT_LOGIN.statusCode)
+    }
+    if (!DataBaseProvider.hasLogin(login)){
+        print("...")
+        System.exit(CodeExecute.NOT_LOGIN.statusCode)
+    }
+    if (!passwordValidate(login, password)){
+        print("...")
+        System.exit(CodeExecute.NOT_PASSWORD.statusCode)
+    }
+
+    val user: User = DataBaseProvider.getUserByLogin(login)
+
+    return user
+
+}
+```
+
+* Метод: Проверяющий валидный ли логин
+```kotlin
+fun loginValidate(login: String): Boolean {
+    login
+    // TODO ... какое-нибудь условие
+}
+```
+
+* Метод: Проверяющий совпадение паролей
+```kotlin
+fun passwordValidate(login: String, password: String): Boolean {
+    val salt = DataBaseProvider.getSaltByLogin(login)
+    val resultPassword = DataBaseProvider.getPasswordByLogin(login)
+
+    return Utils.encode(argPass, salt) == resultPassword
+}
+```
+
 * Метод: TODO ...
 ```kotlin
 
 ```
 
 ## Объект: **АвторизацияПровайдер** 
+
+* Метод: TODO ...
+```kotlin
+
+```
+
+## Объект: **КодСтатус** 
+
 * Метод: TODO ...
 ```kotlin
 
 ```
 
 ## Объект: **Утилит** 
+
 * Метод: Генерирует соль случайно
 ```kotlin
 fun genearateSalt(): String = Random.nextBytes(64).joinToString("") { "%02x".format(it) }
@@ -149,22 +219,66 @@ fun encode(password: String, salt: String): String = hashCode(hashCode(password)
 
 * Метод: Парсит строку и возвращает объект Аргументов
 ```kotlin
-fun parseArgument(password: String, salt: String): String = hashCode(hashCode(password) + salt)
+fun parseArguments(args: Array<String>): Arguments {
+
+    val parser = ArgParser("Authorization project")
+
+    val login by parser.option(ArgType.String, shortName = "login", description = "Input login")
+    val password by parser.option(ArgType.String, shortName = "password", description = "Input password")
+    val role by parser.option(ArgType.String, shortName = "role", description = "Input role")
+    val resourse by parser.option(ArgType.String, shortName = "resourse", description = "Input resource")
+    val ds by parser.option(ArgType.String, shortName = "ds", description = "Input date start: YYYY-m-d")
+    val de by parser.option(ArgType.String, shortName = "de", description = "Input date finish: YYYY-m-d")
+    val vol by parser.option(ArgType.Int, shortName = "vol", description = "Input number")
+
+    parser.parse(args)
+
+    return Arguments(login, password, role, resourse, ds, de, vol)
+
+}
 ```
 
 
 # Тестовые данные
 
+## Список: **Пользователей**
+```kotlin
+
+1. admin(login = admin, password = 0000)
+2. user(login = user, password = 1111)
+
+```
+
+## Список: **Ресурсов**
+```kotlin
+
+1. admin READ A
+2. admin READ B
+3. admin
+
+```
+
+
+# Тестовые сценарии
 ```kotlin
 
 TODO ...
 
 ```
 
-# Тестовые сценарии
+
+# Точка входа в приложение
 ```kotlin
 
-TODO ...
+fun main(args: Array<String>){
+    val arguments: Arguments = Urils.parseArguments(args)
+
+    val user: User = AuthenticationProvider.authenticate(arguments.login, arguments.password)
+
+    // TODO ...
+
+}
+
 
 ```
 
