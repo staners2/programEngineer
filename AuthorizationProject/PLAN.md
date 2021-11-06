@@ -229,7 +229,7 @@ fun parseArguments(args: Array<String>): Arguments {
     val resourse by parser.option(ArgType.String, shortName = "resourse", description = "Input resource")
     val ds by parser.option(ArgType.String, shortName = "ds", description = "Input date start: YYYY-m-d")
     val de by parser.option(ArgType.String, shortName = "de", description = "Input date finish: YYYY-m-d")
-    val vol by parser.option(ArgType.Int, shortName = "vol", description = "Input number")
+    val vol by parser.option(ArgType.String, shortName = "vol", description = "Input number")
 
     parser.parse(args)
 
