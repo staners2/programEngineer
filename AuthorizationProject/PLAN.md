@@ -44,7 +44,7 @@ data class Arguments(
 * Создать объект **КодСтатус**
 ```kotlin
 enum class CodeExecute(val statusCode: Int){
-    TRUE(0),
+    OK(0),
     HELP(1),
     NOT_FORMAT_LOGIN(2),
     NOT_LOGIN(3),
@@ -82,13 +82,14 @@ class AuthenticationProvider {
     companion object {
 
     }
-
-    TODO ...
 }
 ```
 
 * Создать объект **АвторизацияПровайдер**
 ```kotlin
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 // Для авторизации (user + resourse)
 class AuthorizeProvider {
     TODO ...
@@ -149,15 +150,15 @@ fun hasLogin(login: String): Boolean {
 ```kotlin
 fun authenticate(login: String, password: String): User {
     if (!loginValidate(login)){
-        print("...")
+        print("Ошибка: Неверный формат логина")
         System.exit(CodeExecute.NOT_FORMAT_LOGIN.statusCode)
     }
     if (!DataBaseProvider.hasLogin(login)){
-        print("...")
+        print("Ошибка: Не верный логин")
         System.exit(CodeExecute.NOT_LOGIN.statusCode)
     }
     if (!passwordValidate(login, password)){
-        print("...")
+        print("Ошибка: Не верный пароль")
         System.exit(CodeExecute.NOT_PASSWORD.statusCode)
     }
 
@@ -171,8 +172,9 @@ fun authenticate(login: String, password: String): User {
 * Метод: Проверяющий валидный ли логин
 ```kotlin
 fun loginValidate(login: String): Boolean {
-    login
-    // TODO ... какое-нибудь условие
+    // Простая проверка на кол-во символов
+    // строка из букв и цифр не более 20 символов 
+    return (Regex("^[a-zA-z0-9]{0,20}$").find(login) != null)
 }
 ```
 
@@ -193,12 +195,59 @@ fun passwordValidate(login: String, password: String): Boolean {
 
 ## Объект: **АвторизацияПровайдер** 
 
-* Метод: TODO ...
+* Метод: Авторизации
 ```kotlin
-
+fun authorize(user: User, role: String, resourse: String, ds: String?, de: String?, vol: Int?){
+    if (!roleValidate(role)){
+        print("Ошибка: Неизвестная роль")
+        System.exit(CodeExecute.UNKNOWN_ROLES.statusCode)
+    }
+    if (!dostup()){
+        print("Ошибка: Нет доступа")
+        System.exit(CodeExecute.FORBIDDEN.statusCode)
+    }
+    if (ds != null && de != null && vol != null){
+        if (dateValidate(ds, de) || volValidate(vol)){
+            print("Ошибка: Некорректная активность")
+            System.exit(CodeExecute.INCORRECT_ACTIVITY.statusCode)
+        }
+    }
+}
 ```
 
-## Объект: **КодСтатус** 
+* Метод: Валидация роли
+```kotlin
+fun roleValidate(role: String): Boolean {
+    return Roles.values().any { it.name == role }
+}
+```
+
+* Метод: Валидация даты
+```kotlin
+fun dateValidate(ds: String, de: String): Boolean {
+    // ds < de и это даты
+    val format: String = "yyyy-MM-dd"
+    val dateStart = LocalDate.parse(ds, DateTimeFormatter.ofPattern(format))
+    val dateEnd = LocalDate.parse(de, DateTimeFormatter.ofPattern(format))
+    return dateStart < dateEnd
+}
+```
+
+
+* Метод: Валидация объема
+```kotlin
+fun volValidate(vol: String): Boolean {
+    // преобразовать в число
+    return vol.toIntOrNull() != null 
+}
+```
+
+* Метод: Имеет ли пользователь доступ к ресурсу
+```kotlin
+fun dostup(): Boolean {
+
+}
+```
 
 * Метод: TODO ...
 ```kotlin
@@ -209,13 +258,18 @@ fun passwordValidate(login: String, password: String): Boolean {
 
 * Метод: Генерирует соль случайно
 ```kotlin
-fun genearateSalt(): String = Random.nextBytes(64).joinToString("") { "%02x".format(it) }
+fun genearateSalt(): String = Random.nextBytes(32).joinToString("") { "%02x".format(it) }
 ```
 
 * Метод: Шифрует пароль
 ```kotlin
-fun encode(password: String, salt: String): String = hashCode(hashCode(password) + salt)
-```
+fun encode(password: String, salt: String): String = getHash(getHash(password) + salt)
+```      
+
+* Метод: Шифрует строку MD5
+```kotlin
+fun getHash(sourse: String): String = MessageDigest.getInstance("MD5").digest(sourse.toByteArray()).joinToString("") { "%02x".format(it) }
+```  
 
 * Метод: Парсит строку и возвращает объект Аргументов
 ```kotlin
@@ -261,8 +315,37 @@ fun parseArguments(args: Array<String>): Arguments {
 
 # Тестовые сценарии
 ```kotlin
+// Наличие справки
+java -jar "main.jar" -h
+// Аутентификация
+java -jar "main.jar" -login user -pass 1111
+// Аутентификация
+java -jar "main.jar" -pass 1111 -login user
+// Логин не проходит валидацию  (> 3 символов)
+java -jar "main.jar" -login use -pass 1111
+// Такой аккаунт не существует
+java -jar "main.jar" -login 1234 -pass 1234
 
-TODO ...
+
+// TODO ...
+//
+java -jar "main.jar" -login user -pass 11111 -role READ -res A
+//
+java -jar "main.jar" -login user -pass zzz -role qwe -res A
+//
+java -jar "main.jar" -login q -pass ytrewq -role EXECUTE -res A
+//
+java -jar "main.jar" -login admin -pass 0000 -role READ -res A.B
+//
+java -jar "main.jar" -login admin -pass 0000 -role WRITE -res A.B.C
+//
+java -jar "main.jar" -login user -pass zzz -role qwe -res A.B.C
+//
+java -jar "main.jar" -login user -pass zzz -role WRITE -res A.B
+java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-11 -de 2020-01-12 -vol 10
+java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020.01.11 -de 2020.01.12 -vol 10
+java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-1 -de 2020-01-60 -vol 10
+java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-11 -de 2020-10-12 -vol hgh
 
 ```
 
@@ -273,10 +356,18 @@ TODO ...
 fun main(args: Array<String>){
     val arguments: Arguments = Urils.parseArguments(args)
 
-    val user: User = AuthenticationProvider.authenticate(arguments.login, arguments.password)
+    if (arguments.login != null && arguments.password != null){
+        val user: User = AuthenticationProvider.authenticate(arguments.login, arguments.password)
+
+        if (arguments.role != null && arguments.resourse != null){
+            // Провести авторизацию
+            // TODO ...
+        }
+    }
+    
 
     // TODO ...
-
+    System.exit(CodeExecute.OK.statusCode)
 }
 
 
