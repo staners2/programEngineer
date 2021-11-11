@@ -37,7 +37,7 @@ data class Arguments(
     val resourse: String?,
     val ds: String?,
     val de: String?,
-    val vol: Int?
+    val vol: String?
 )
 ```
 
@@ -100,7 +100,6 @@ class AuthorizeProvider {
 
 * Создать объект **Утилит**
 ```kotlin
-// Для хеширования паролей
 import java.security.MessageDigest
 import kotlin.random.Random
 import kotlinx.cli.*
@@ -172,8 +171,6 @@ fun authenticate(login: String, password: String): User {
 * Метод: Проверяющий валидный ли логин
 ```kotlin
 fun loginValidate(login: String): Boolean {
-    // Простая проверка на кол-во символов
-    // строка из букв и цифр не более 20 символов 
     return (Regex("^[a-zA-z0-9]{0,20}$").find(login) != null)
 }
 ```
@@ -197,7 +194,7 @@ fun passwordValidate(login: String, password: String): Boolean {
 
 * Метод: Авторизации
 ```kotlin
-fun authorize(user: User, role: String, resourse: String, ds: String?, de: String?, vol: Int?){
+fun authorize(user: User, role: String, resourse: String, ds: String?, de: String?, vol: String?){
     if (!roleValidate(role)){
         print("Ошибка: Неизвестная роль")
         System.exit(CodeExecute.UNKNOWN_ROLES.statusCode)
@@ -225,7 +222,6 @@ fun roleValidate(role: String): Boolean {
 * Метод: Валидация даты
 ```kotlin
 fun dateValidate(ds: String, de: String): Boolean {
-    // ds < de и это даты
     val format: String = "yyyy-MM-dd"
     val dateStart = LocalDate.parse(ds, DateTimeFormatter.ofPattern(format))
     val dateEnd = LocalDate.parse(de, DateTimeFormatter.ofPattern(format))
@@ -237,7 +233,6 @@ fun dateValidate(ds: String, de: String): Boolean {
 * Метод: Валидация объема
 ```kotlin
 fun volValidate(vol: String): Boolean {
-    // преобразовать в число
     return vol.toIntOrNull() != null 
 }
 ```
@@ -270,6 +265,12 @@ fun encode(password: String, salt: String): String = getHash(getHash(password) +
 ```kotlin
 fun getHash(sourse: String): String = MessageDigest.getInstance("MD5").digest(sourse.toByteArray()).joinToString("") { "%02x".format(it) }
 ```  
+
+* Метод: Переводит в строку
+```kotlin
+// TODO
+fun ByteArray.toStr(): String = MessageDigest.getInstance("MD5").digest(sourse.toByteArray()).joinToString("") { "%02x".format(it) }
+``` 
 
 * Метод: Парсит строку и возвращает объект Аргументов
 ```kotlin
@@ -365,8 +366,6 @@ fun main(args: Array<String>){
         }
     }
     
-
-    // TODO ...
     System.exit(CodeExecute.OK.statusCode)
 }
 
