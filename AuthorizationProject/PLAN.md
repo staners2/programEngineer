@@ -171,7 +171,7 @@ fun authenticate(login: String, password: String): User {
 * Метод: Проверяющий валидный ли логин
 ```kotlin
 fun loginValidate(login: String): Boolean {
-    return (Regex("^[a-zA-z0-9]{0,20}$").find(login) != null)
+    return (Regex("^[a-zA-z0-9]{0,20}$").mathes(login))
 }
 ```
 
