@@ -278,6 +278,9 @@ fun getHash(sourse: String): String = MessageDigest.getInstance("MD5").digest(so
 fun ByteArray.toStr(): String = MessageDigest.getInstance("MD5").digest(sourse.toByteArray()).joinToString("") { "%02x".format(it) }
 ``` 
 
+
+## Объект: **Аргумент**
+
 * Метод: Парсит строку и возвращает объект Аргументов
 ```kotlin
 fun parseArguments(args: Array<String>): Arguments {
