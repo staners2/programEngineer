@@ -1,5 +1,6 @@
 package main.kotlin.providers
 
+import main.kotlin.models.RoleResourse
 import main.kotlin.models.User
 import main.kotlin.soursedata.SourseData
 
@@ -19,5 +20,9 @@ class DataBaseProvider {
 
     fun hasLogin(login: String): Boolean {
         return getUserByLogin(login) != null
+    }
+
+    fun getResourses(): List<RoleResourse> {
+        return SourseData.roleResourses
     }
 }

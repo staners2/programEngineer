@@ -1,27 +1,30 @@
 package main.kotlin.providers
 
 import main.kotlin.models.CodeExecute
+import main.kotlin.models.RoleResourse
 import main.kotlin.models.Roles
+import main.kotlin.models.User
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 object AuthorizeProvider {
 
+    val dataBase: DataBaseProvider = DataBaseProvider()
+
     fun authorize(login: String, password: String, role: String, resourse: String, ds: String?, de: String?, vol: String?): CodeExecute {
+
         if (!Roles.roleValidate(role)){
             return CodeExecute.UNKNOWN_ROLES
         }
-        if (!dostup()){
+        if (!isResourceAccess(login, role, resourse)){
             return CodeExecute.FORBIDDEN
         }
 
         if (ds != null && de != null && vol != null){
-            if (dateValidate(ds, de) || volValidate(vol)) {
+            if (!dateValidate(ds, de) || !volValidate(vol)) {
                 return CodeExecute.INCORRECT_ACTIVITY
             }
-        } else{
-            return CodeExecute.INCORRECT_ACTIVITY
         }
 
         return CodeExecute.OK
@@ -31,6 +34,7 @@ object AuthorizeProvider {
         val format: String = "yyyy-MM-dd"
         val dateStart: LocalDate
         val dateEnd: LocalDate
+
         try{
             dateStart = LocalDate.parse(ds, DateTimeFormatter.ofPattern(format))
             dateEnd = LocalDate.parse(de, DateTimeFormatter.ofPattern(format))
@@ -49,7 +53,14 @@ object AuthorizeProvider {
     /**
      * Метод для проверки доступа к ресурсу
      */
-    fun dostup(): Boolean {
-        return true
+    fun isResourceAccess(login: String, role: String, resourse: String): Boolean {
+        val userId = (dataBase.getUserByLogin(login) as User).id
+
+        for (item in dataBase.getResourses()) {
+            if (item.userId == userId && item.role.name == role && RoleResourse.isResourse(resourse, item.resource)) {
+                return true
+            }
+        }
+        return false
     }
 }
