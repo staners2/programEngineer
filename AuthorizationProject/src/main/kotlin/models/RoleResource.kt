@@ -1,14 +1,14 @@
 package main.kotlin.models
 
-data class RoleResourse(
+data class RoleResource(
     val role: Roles,
     val resource: String,
-    val userId: Int = 0,
+    val userId: Int = 0
 ) {
     companion object {
-        fun isResourse(resource: String, itemResourse: String): Boolean {
+        fun isResource(resource: String, itemResource: String): Boolean {
             val resourceList = resource.split(".")
-            val itemResourceList = itemResourse.split(".")
+            val itemResourceList = itemResource.split(".")
 
             if (itemResourceList.count() > resourceList.count()) {
                 return false

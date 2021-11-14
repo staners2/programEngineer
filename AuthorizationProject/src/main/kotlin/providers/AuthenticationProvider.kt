@@ -1,10 +1,11 @@
 package main.kotlin.providers
 
+import main.kotlin.Utils
 import main.kotlin.models.CodeExecute
 
 object AuthenticationProvider {
 
-    val dataBase: DataBaseProvider = DataBaseProvider()
+    private val dataBase: DataBaseProvider = DataBaseProvider()
 
     fun authenticate(login: String, password: String): CodeExecute {
 
@@ -21,11 +22,11 @@ object AuthenticationProvider {
         return CodeExecute.OK
     }
 
-    fun loginValidate(login: String): Boolean {
+    private fun loginValidate(login: String): Boolean {
         return (Regex("^[a-zA-z0-9]{0,20}$").matches(login))
     }
 
-    fun passwordValidate(login: String, password: String): Boolean {
+    private fun passwordValidate(login: String, password: String): Boolean {
         val salt = dataBase.getSaltByLogin(login)
         val resultPassword = dataBase.getPasswordByLogin(login)
 

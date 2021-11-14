@@ -1,6 +1,6 @@
 package main.kotlin.providers
 
-import main.kotlin.models.RoleResourse
+import main.kotlin.models.RoleResource
 import main.kotlin.models.User
 import main.kotlin.soursedata.SourseData
 
@@ -22,7 +22,7 @@ class DataBaseProvider {
         return getUserByLogin(login) != null
     }
 
-    fun getResourses(): List<RoleResourse> {
-        return SourseData.roleResourses
+    fun getResourses(): List<RoleResource> {
+        return SourseData.roleResours
     }
 }
