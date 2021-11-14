@@ -147,23 +147,18 @@ fun hasLogin(login: String): Boolean {
 
 * Метод: Начать Аутентификацию
 ```kotlin
-fun authenticate(login: String, password: String): User {
+fun authenticate(login: String, password: String): CodeExecute {
     if (!loginValidate(login)){
-        print("Ошибка: Неверный формат логина")
-        System.exit(CodeExecute.NOT_FORMAT_LOGIN.statusCode)
+        return CodeExecute.NOT_FORMAT_LOGIN.statusCode
     }
     if (!DataBaseProvider.hasLogin(login)){
-        print("Ошибка: Не верный логин")
-        System.exit(CodeExecute.NOT_LOGIN.statusCode)
+        return CodeExecute.NOT_LOGIN.statusCode
     }
-    if (!passwordValidate(login, password)){
-        print("Ошибка: Не верный пароль")
-        System.exit(CodeExecute.NOT_PASSWORD.statusCode)
+    if (!userValidate(login, password)){
+        return CodeExecute.NOT_PASSWORD.statusCode
     }
 
-    val user: User = DataBaseProvider.getUserByLogin(login)
-
-    return user
+    return CodeExecute.OK
 
 }
 ```
@@ -177,7 +172,7 @@ fun loginValidate(login: String): Boolean {
 
 * Метод: Проверяющий совпадение паролей
 ```kotlin
-fun passwordValidate(login: String, password: String): Boolean {
+fun userValidate(login: String, password: String): Boolean {
     val salt = DataBaseProvider.getSaltByLogin(login)
     val resultPassword = DataBaseProvider.getPasswordByLogin(login)
 
@@ -194,21 +189,19 @@ fun passwordValidate(login: String, password: String): Boolean {
 
 * Метод: Авторизации
 ```kotlin
-fun authorize(user: User, role: String, resourse: String, ds: String?, de: String?, vol: String?){
+fun authorize(login: String, password: String, role: String, resourse: String, ds: String?, de: String?, vol: String?): CodeExecute {
     if (!roleValidate(role)){
-        print("Ошибка: Неизвестная роль")
-        System.exit(CodeExecute.UNKNOWN_ROLES.statusCode)
+        return CodeExecute.UNKNOWN_ROLES.statusCode
     }
     if (!dostup()){
-        print("Ошибка: Нет доступа")
-        System.exit(CodeExecute.FORBIDDEN.statusCode)
+        return CodeExecute.FORBIDDEN.statusCode
     }
     if (ds != null && de != null && vol != null){
         if (dateValidate(ds, de) || volValidate(vol)){
-            print("Ошибка: Некорректная активность")
-            System.exit(CodeExecute.INCORRECT_ACTIVITY.statusCode)
+            return CodeExecute.INCORRECT_ACTIVITY.statusCode
         }
     }
+    return CodeExecute.OK.statuscode
 }
 ```
 
@@ -364,17 +357,19 @@ java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-11 -d
 
 fun main(args: Array<String>){
     val arguments: Arguments = Urils.parseArguments(args)
+    val exitCode: Int = 0
 
     if (arguments.login != null && arguments.password != null){
-        val user: User = AuthenticationProvider.authenticate(arguments.login, arguments.password)
+        exitCode = AuthenticationProvider.authenticate(arguments.login, arguments.password)
 
         if (arguments.role != null && arguments.resourse != null){
             // Провести авторизацию
+            exitCode = AuthorizeProvider.authorize(arguments.login, arguments.password, arguments.role, arguments.resourse, arguments.ds, arguments.de, arguments.vol)
             // TODO ...
         }
     }
     
-    System.exit(CodeExecute.OK.statusCode)
+    System.exit(exitCode)
 }
 
 
