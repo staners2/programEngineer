@@ -113,7 +113,7 @@ class Utils {
 
 
 # Методы объектов
-## Объект: **База Данных Провайдер** 
+## Объект: **БазаДанныхПровайдер** 
 
 * Метод: Возвращающий объект пользователя по логину
 ```kotlin
@@ -190,7 +190,7 @@ fun userValidate(login: String, password: String): Boolean {
 * Метод: Авторизации
 ```kotlin
 fun authorize(login: String, password: String, role: String, resourse: String, ds: String?, de: String?, vol: String?): CodeExecute {
-    if (!roleValidate(role)){
+    if (!Roles.roleValidate(role)){
         return CodeExecute.UNKNOWN_ROLES.statusCode
     }
     if (!dostup()){
@@ -202,13 +202,6 @@ fun authorize(login: String, password: String, role: String, resourse: String, d
         }
     }
     return CodeExecute.OK.statuscode
-}
-```
-
-* Метод: Валидация роли
-```kotlin
-fun roleValidate(role: String): Boolean {
-    return Roles.values().any { it.name == role }
 }
 ```
 
@@ -248,6 +241,18 @@ fun dostup(): Boolean {
 * Метод: TODO ...
 ```kotlin
 
+```
+
+
+## Объект: **Ролей**
+
+* Метод: Валидация роли
+```kotlin
+companion object {
+    fun roleValidate(role: String): Boolean {
+        return Roles.values().any { it.name == role }
+    }
+}
 ```
 
 ## Объект: **Утилит** 
