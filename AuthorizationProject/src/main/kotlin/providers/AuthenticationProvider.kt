@@ -4,11 +4,14 @@ import main.kotlin.models.CodeExecute
 
 object AuthenticationProvider {
 
+    val dataBase: DataBaseProvider = DataBaseProvider()
+
     fun authenticate(login: String, password: String): CodeExecute {
+
         if (!loginValidate(login)){
             return CodeExecute.NOT_FORMAT_LOGIN
         }
-        if (!DataBaseProvider.hasLogin(login)){
+        if (!dataBase.hasLogin(login)){
             return CodeExecute.NOT_LOGIN
         }
         if (!passwordValidate(login, password)){
@@ -23,8 +26,8 @@ object AuthenticationProvider {
     }
 
     fun passwordValidate(login: String, password: String): Boolean {
-        val salt = DataBaseProvider.getSaltByLogin(login)
-        val resultPassword = DataBaseProvider.getPasswordByLogin(login)
+        val salt = dataBase.getSaltByLogin(login)
+        val resultPassword = dataBase.getPasswordByLogin(login)
 
         return Utils.encode(password, salt) == resultPassword
     }
