@@ -223,8 +223,16 @@ fun roleValidate(role: String): Boolean {
 ```kotlin
 fun dateValidate(ds: String, de: String): Boolean {
     val format: String = "yyyy-MM-dd"
-    val dateStart = LocalDate.parse(ds, DateTimeFormatter.ofPattern(format))
-    val dateEnd = LocalDate.parse(de, DateTimeFormatter.ofPattern(format))
+    val dateStart: LocalDate
+    val dateEnd: LocalDate
+    try{
+        dateStart = LocalDate.parse(ds, DateTimeFormatter.ofPattern(format))
+        dateEnd = LocalDate.parse(de, DateTimeFormatter.ofPattern(format))
+    }
+    catch (ex: DateTimeParseException){
+        return false
+    }
+
     return dateStart < dateEnd
 }
 ```
