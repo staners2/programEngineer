@@ -383,5 +383,35 @@ fun main(args: Array<String>){
 
 ```
 
+* Создать объект **Дерево ресурсов** и метод поиска 
+```kotlin
+package com.cosmiclearn.kotlin.treeset
+import java.util.*
+
+fun main() {
+    val resources = TreeSet<String>()
+    resources.add("A")
+    resources.add("B")
+    resources.add("E")
+    resources.add("C")
+    resources.add("F")
+    resources.add("G")
+    resources.add("D")
+   
+    fun getNecessaryResource(sortedResources: TreeSet<String>, res: String?): String? {
+        val findFirst = sortedResources.stream().filter { word: String ->
+            word.startsWith(
+                res!!
+            )
+        }.findFirst()
+        return findFirst.orElse("this word is absent")
+    }
+
+   
+}
+
+)
+```
+
 
 
