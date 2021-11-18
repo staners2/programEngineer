@@ -1,3 +1,4 @@
+import main.kotlin.Utils
 import main.kotlin.models.Arguments
 import main.kotlin.models.CodeExecute
 import main.kotlin.providers.AuthenticationProvider
@@ -5,7 +6,7 @@ import main.kotlin.providers.AuthorizeProvider
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>){
-    val arguments: Arguments = Arguments.parseArguments(args)
+    val arguments: Arguments = Utils.parseArguments(args)
     var exitCode: CodeExecute = CodeExecute.OK
 
     if (arguments.login != null && arguments.password != null){
