@@ -1,7 +1,7 @@
 package main.kotlin.providers
 
+import main.kotlin.Utils
 import main.kotlin.models.CodeExecute
-import main.kotlin.models.RoleResource
 import main.kotlin.models.Roles
 import main.kotlin.models.User
 import java.time.LocalDate
@@ -54,7 +54,7 @@ object AuthorizeProvider {
         val userId = (dataBase.getUserByLogin(login) as User).id
 
         for (item in dataBase.getResourses()) {
-            if (item.userId == userId && item.role.name == role && RoleResource.isResource(resourse, item.resource)) {
+            if (item.userId == userId && item.role.name == role && Utils.isResource(resourse, item.resource)) {
                 return true
             }
         }
