@@ -3,19 +3,17 @@ package main.kotlin.providers
 import main.kotlin.Utils
 import main.kotlin.models.CodeExecute
 
-object AuthenticationProvider {
-
-    private val dataBase: DataBaseProvider = DataBaseProvider()
+class AuthenticationProvider(val dataBase: DataBaseProvider) {
 
     fun authenticate(login: String, password: String): CodeExecute {
 
-        if (!loginValidate(login)){
+        if (!loginValidate(login)) {
             return CodeExecute.NOT_FORMAT_LOGIN
         }
-        if (!dataBase.hasLogin(login)){
+        if (!dataBase.hasLogin(login)) {
             return CodeExecute.NOT_LOGIN
         }
-        if (!passwordValidate(login, password)){
+        if (!passwordValidate(login, password)) {
             return CodeExecute.NOT_PASSWORD
         }
 

@@ -8,9 +8,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-object AuthorizeProvider {
-
-    private val dataBase: DataBaseProvider = DataBaseProvider()
+class AuthorizeProvider(val dataBase: DataBaseProvider) {
 
     fun authorize(login: String, role: String, resource: String, ds: String?, de: String?, vol: String?): CodeExecute {
 
