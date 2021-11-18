@@ -6,83 +6,21 @@ import main.kotlin.models.Roles
 
 object SourseData {
     val roleResours: List<RoleResource> = listOf(
-        RoleResource(
-            Roles.READ,
-            "A",
-            0
-        ),
-        RoleResource(
-            Roles.READ,
-            "B",
-            0
-        ),
-        RoleResource(
-            Roles.READ,
-            "C",
-            0
-        ),
-        RoleResource(
-            Roles.WRITE,
-            "A",
-            0
-        ),
-        RoleResource(
-            Roles.WRITE,
-            "B",
-            0
-        ),
-        RoleResource(
-            Roles.WRITE,
-            "C",
-            0
-        ),
-        RoleResource(
-            Roles.EXECUTE,
-            "A",
-            0
-        ),
-        RoleResource(
-            Roles.EXECUTE,
-            "B",
-            0
-        ),
-        RoleResource(
-            Roles.EXECUTE,
-            "C",
-            0
-        ),
-        //endregion
-        //region user
-        RoleResource(
-            Roles.READ,
-            "A",
-            1
-        ),
-        RoleResource(
-            Roles.EXECUTE,
-            "A.B",
-            1
-        ),
-        RoleResource(
-            Roles.WRITE,
-            "XY.UV.ABCDEFGHIJ",
-            1
-        ),
-        RoleResource(
-            Roles.READ,
-            "A",
-            2
-        ),
-        RoleResource(
-            Roles.WRITE,
-            "A.B",
-            2
-        ),
-        RoleResource(
-            Roles.EXECUTE,
-            "A.B.C",
-            3
-        )
+        RoleResource(Roles.READ, "A", 0),
+        RoleResource(Roles.READ, "B", 0),
+        RoleResource(Roles.READ, "C", 0),
+        RoleResource(Roles.WRITE, "A", 0),
+        RoleResource(Roles.WRITE, "B", 0),
+        RoleResource(Roles.WRITE, "C", 0),
+        RoleResource(Roles.EXECUTE, "A", 0),
+        RoleResource(Roles.EXECUTE, "B", 0),
+        RoleResource(Roles.EXECUTE, "C", 0),
+        RoleResource(Roles.READ, "A", 1),
+        RoleResource(Roles.EXECUTE, "A.B", 1),
+        RoleResource(Roles.WRITE, "XY.UV.ABCDEFGHIJ", 1),
+        RoleResource(Roles.READ, "A", 2),
+        RoleResource(Roles.WRITE, "A.B", 2),
+        RoleResource(Roles.EXECUTE, "A.B.C", 3)
     )
     
     val users: List<User> = listOf(
