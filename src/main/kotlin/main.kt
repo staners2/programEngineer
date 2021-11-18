@@ -7,8 +7,9 @@ import main.kotlin.providers.DataBaseProvider
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>){
-    val authenticationProvider = AuthenticationProvider(DataBaseProvider())
-    val authorizeProvider = AuthorizeProvider(DataBaseProvider())
+    val dataBaseProvider = DataBaseProvider()
+    val authenticationProvider = AuthenticationProvider(dataBaseProvider)
+    val authorizeProvider = AuthorizeProvider(dataBaseProvider)
 
     val arguments: Arguments = Utils.parseArguments(args)
     var exitCode: CodeExecute = CodeExecute.OK
