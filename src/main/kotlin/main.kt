@@ -10,19 +10,18 @@ fun main(args: Array<String>){
 
     if (arguments.login != null && arguments.password != null){
         exitCode = AuthenticationProvider.authenticate(arguments.login, arguments.password)
+    }
 
-        if (arguments.role != null && arguments.resource != null){
-            // Провести авторизацию
-            exitCode = AuthorizeProvider.authorize(
-                arguments.login,
-                arguments.role,
-                arguments.resource,
-                arguments.ds,
-                arguments.de,
-                arguments.vol
-            )
-            // TODO ...
-        }
+    if (arguments.role != null && arguments.resource != null){
+        // Провести авторизацию
+        exitCode = AuthorizeProvider.authorize(
+            arguments.login.toString(),
+            arguments.role,
+            arguments.resource,
+            arguments.ds,
+            arguments.de,
+            arguments.vol
+        )
     }
 
     exitProcess(exitCode.statusCode)
