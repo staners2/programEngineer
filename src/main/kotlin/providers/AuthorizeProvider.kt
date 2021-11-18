@@ -51,11 +51,6 @@ class AuthorizeProvider(val dataBase: DataBaseProvider) {
     private fun isResourceAccess(login: String, role: String, resourse: String): Boolean {
         val userId = (dataBase.getUserByLogin(login) as User).id
 
-        for (item in dataBase.getResourses()) {
-            if (item.userId == userId && item.role.name == role && Utils.isResource(resourse, item.resource)) {
-                return true
-            }
-        }
-        return false
+        return dataBase.getResourses().any {it.userId == userId && it.role.name == role && Utils.isResource(resourse, it.resource)}
     }
 }
