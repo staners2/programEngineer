@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Permission Build.sh
-        run: chmod 777 ./AuthorizationProject/BUILD.sh
+        run: chmod 777 ./BUILD.sh
 
       - name: Run Build
-        run: ./AuthorizationProject/BUILD.sh      
+        run: ./BUILD.sh

@@ -104,7 +104,7 @@ import java.security.MessageDigest
 import kotlin.random.Random
 import kotlinx.cli.*
 
-class main.kotlin.Utils {
+class Utils {
     companion object {
 
     }
@@ -176,7 +176,7 @@ fun userValidate(login: String, password: String): Boolean {
     val salt = DataBaseProvider.getSaltByLogin(login)
     val resultPassword = DataBaseProvider.getPasswordByLogin(login)
 
-    return main.kotlin.Utils.encode(argPass, salt) == resultPassword
+    return Utils.encode(argPass, salt) == resultPassword
 }
 ```
 

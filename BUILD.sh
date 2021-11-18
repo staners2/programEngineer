@@ -1,15 +1,1 @@
-#!/bin/bash
-
-source_dir="./src/main/kotlin"
-
-out_dir=./out
-
-if [ ! -f $out_dir ]
-    then mkdir $out_dir
-fi
-
-for (( i=1; i <= 6; i++ ))
-do
-    cmd="kotlinc $source_dir/task$i.kt -include-runtime -d $out_dir/task$i.jar"
-    $cmd
-done
+kotlinc src/main/kotlin/*.kt src/main/kotlin/models/*.kt src/main/kotlin/providers/*.kt src/main/kotlin/soursedata/*.kt -cp lib/kotlinx-cli-0.2.1.jar -include-runtime -d main.jar
