@@ -34,12 +34,8 @@ object Utils {
         val resourceList = resource.split(".")
         val itemResourceList = itemResource.split(".")
 
-        if (itemResourceList.count() > resourceList.count()) {
-            return false
-        }
-
-        for (i in 0 until itemResourceList.count()) {
-            if (itemResourceList[i] != resourceList[i]) {
+        resourceList.forEachIndexed { i, item ->
+            if (itemResourceList[i] != item) {
                 return false
             }
         }
