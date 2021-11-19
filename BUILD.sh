@@ -1,1 +1,1 @@
-kotlinc src/main/kotlin/*.kt src/main/kotlin/models/*.kt src/main/kotlin/providers/*.kt src/main/kotlin/soursedata/*.kt -cp lib/kotlinx-cli-0.2.1.jar -include-runtime -d main.jar
+kotlinc src/main/kotlin/*.kt src/main/kotlin/models/*.kt src/main/kotlin/providers/*.kt src/main/kotlin/soursedata/*.kt -cp lib/kotlinx-cli-0.2.1.jar -include-runtime -d out/main.jar
