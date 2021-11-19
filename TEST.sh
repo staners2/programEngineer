@@ -13,7 +13,7 @@ input[4]="-login admin -password WrongPassword"
 input[5]="-login admin -password 00000 -role READ -resource A"
 input[6]="-login admin -password 00000 -role WRITE -resource A.B"
 input[7]="-login admin -password 00000 -role UNKNOWNROLE -resource A"
-input[8]="-login admin -password 00000 -role EXECUDE -resource A"
+input[8]="-login admin -password 00000 -role EXECUTE -resource A"
 
 # Логин, Пароль, Ресурс, Дата начала, Дата завершения, Объем
 input[9]="-login admin -password 00000 -role READ -resource A -ds 2015-12-31 -de 2016-12-31 -vol 55"
