@@ -308,57 +308,80 @@ fun parseArguments(args: Array<String>): Arguments {
 ## Список: **Пользователей**
 ```kotlin
 
-1. admin(login = admin, password = 0000)
-2. user(login = user, password = 1111)
+1. User(0, "admin", "2b0f98d3c29b6eff9634917feef9fe6b", "salt") // pass: 00000
 
 ```
 
 ## Список: **Ресурсов**
 ```kotlin
 
-1. admin READ A
-2. admin READ B
-3. admin
+1. RoleResource(Roles.READ, "A", 0)
+2. RoleResource(Roles.WRITE, "A.B", 0)
 
 ```
 
 
 # Тестовые сценарии
+## Логин, Пароль
 ```kotlin
-// Наличие справки
-java -jar "main.jar" -h
-// Аутентификация
-java -jar "main.jar" -login user -pass 1111
-// Аутентификация
-java -jar "main.jar" -pass 1111 -login user
-// Логин не проходит валидацию  (> 3 символов)
-java -jar "main.jar" -login use -pass 1111
-// Такой аккаунт не существует
-java -jar "main.jar" -login 1234 -pass 1234
+// Code: 0 | Ввести правильные данные
+java -jar "main.jar" -login admin -password 00000
 
+// Code: 0 | Ввести правильные данные, но поменять порядок записи
+java -jar "main.jar" -password 00000 -login admin
+        
+// Code: 2 | Ввести неверный формат логина
+java -jar "main.jar" -login "?login?" -password 00000
 
-// TODO ...
-//
-java -jar "main.jar" -login user -pass 11111 -role READ -res A
-//
-java -jar "main.jar" -login user -pass zzz -role qwe -res A
-//
-java -jar "main.jar" -login q -pass ytrewq -role EXECUTE -res A
-//
-java -jar "main.jar" -login admin -pass 0000 -role READ -res A.B
-//
-java -jar "main.jar" -login admin -pass 0000 -role WRITE -res A.B.C
-//
-java -jar "main.jar" -login user -pass zzz -role qwe -res A.B.C
-//
-java -jar "main.jar" -login user -pass zzz -role WRITE -res A.B
-java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-11 -de 2020-01-12 -vol 10
-java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020.01.11 -de 2020.01.12 -vol 10
-java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-1 -de 2020-01-60 -vol 10
-java -jar "main.jar" -login user -pass zzz -role READ -res A.B -ds 2020-01-11 -de 2020-10-12 -vol hgh
-
+// Code: 3 | Ввести данные не зарегистрированного пользователя
+java -jar "main.jar" -login NotRegUser -password NotRegUser
+        
+// Code: 4 | Ввести верный логин, но неверный пароль
+java -jar "main.jar" -login admin -password WrongPassword
 ```
 
+## Логин, Пароль, Роль, Ресурс
+```kotlin
+// Code: 0 | Ввести вверные данные для доступа к ресурсу
+java -jar "main.jar" -login admin -password 00000 -role READ -resource A
+
+// Code: 0 | Ввести вверные данные для доступа к ресурсу
+java -jar "main.jar" -login admin -password 00000 -role WRITE -resource "A.B"
+
+// Code: 5 | Ввести не существующую роль
+java -jar "main.jar" -login admin -password 00000 -role UNKNOWNROLE -resource A
+
+// Code: 5 | Ввести не существующий ресурс
+java -jar "main.jar" -login admin -password 00000 -role READ -resource NOT_FOUND_RESOURCE
+
+// Code: 6 | Ввести данные ресурса с ролью, к которому нет доступа у пользователя
+java -jar "main.jar" -login admin -password 00000 -role EXECUDE -resource A
+```
+
+## Логин, Пароль, Роль, Ресурс, Дата начала, Дата завершения, Объем
+```kotlin
+// Code: 0 | Ввести валидные данные
+java -jar "main.jar" -login admin -password 00000 -role READ -resource A -ds "2015-12-31" -de "2016-12-31" -vol 55
+
+// Code: 7 | Дата начала первышает дату завершения
+java -jar "main.jar" -login admin -password 00000 -role READ -resource A -ds "2017-12-31" -de "2016-12-31" -vol 55
+
+// Code: 7 | Ввести не верный формат даты
+java -jar "main.jar" -login admin -password 00000 -role READ -resource A -ds "time_start" -de "time_end" -vol 55
+
+// Code: 7 | Ввести не верный объем (не является числом)
+java -jar "main.jar" login admin -password 00000 -role READ -resource A -ds "2017-12-31" -de "2016-12-31" -vol NOT_VALID -vol 55
+```
+
+## Справка
+
+```kotlin
+// Code: 0 | Передать параметром -h
+java -jar "main.jar" login admin -h
+
+// Code: 0 | Не передавать параметров
+java -jar "main.jar" ""
+```
 
 # Точка входа в приложение
 ```kotlin
