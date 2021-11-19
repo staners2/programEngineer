@@ -1,3 +1,5 @@
+package app
+
 import main.kotlin.Utils
 import main.kotlin.models.Arguments
 import main.kotlin.models.CodeExecute
