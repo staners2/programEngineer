@@ -1,3 +1,11 @@
+# Ресурсы
+* [PAGE SITE](https://staners2.github.io/programEngineer/)
+
+* [ROADMAP1](https://staners2.github.io/programEngineer/PLAN)
+* [ROADMAP2](https://staners2.github.io/programEngineer/Roadmap2)
+
+* [Ретроспектива ROADMAP1](https://staners2.github.io/programEngineer/RETRO1)
+
 # Инструкция
 
 ## Запуск сборки приложения
