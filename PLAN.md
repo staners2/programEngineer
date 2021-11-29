@@ -7,7 +7,6 @@ data class User(
     val login: String,
     val pass: String,
     val salt: String,
-
 )
 ```
 
@@ -23,9 +22,11 @@ enum class Roles() {
 * Создать объект **РольРесурс**
 ```kotlin
 // {user resourse role}
-class RoleResourses {
-    TODO ...
-}
+data class RoleResource(
+    val role: Roles,
+    val resource: String,
+    val userId: Int = 0
+)
 ```
 
 * Создать объект **Аргумент**
@@ -56,18 +57,15 @@ enum class CodeExecute(val statusCode: Int){
 ```
 
 * Создать объект **БазаДанныхПровайдер**
+
 ```kotlin
 import SourseData.*
-
-class DataBaseProvider(val sourseData: SourseData) {
-    
-}
+class DataBaseProvider(val sourseData: SourseData) {}
 ```
 
 * Создать объект **ИсточникДанных**
 ```kotlin
 package SourseData
-
 class SourseData {
     public val roleResourses: List<RoleResourses> = listOf(...)
     public val users: List<User> = listOf(...)
@@ -78,7 +76,6 @@ class SourseData {
 ```kotlin
 // Для аутентификации (логин + pass)
 class AuthenticationProvider {
-
     companion object {
 
     }
@@ -89,26 +86,16 @@ class AuthenticationProvider {
 ```kotlin
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 // Для авторизации (user + resourse)
-class AuthorizeProvider {
-    TODO ...
-}
+class AuthorizeProvider { }
 ```
-
-
 
 * Создать объект **Утилит**
 ```kotlin
 import java.security.MessageDigest
 import kotlin.random.Random
 import kotlinx.cli.*
-
-class Utils {
-    companion object {
-
-    }
-}
+class Utils { }
 ```
 
 
@@ -159,7 +146,6 @@ fun authenticate(login: String, password: String): CodeExecute {
     }
 
     return CodeExecute.OK
-
 }
 ```
 
@@ -180,10 +166,6 @@ fun userValidate(login: String, password: String): Boolean {
 }
 ```
 
-* Метод: TODO ...
-```kotlin
-
-```
 
 ## Объект: **АвторизацияПровайдер** 
 
@@ -193,8 +175,8 @@ fun authorize(login: String, password: String, role: String, resourse: String, d
     if (!Roles.roleValidate(role)){
         return CodeExecute.UNKNOWN_ROLES.statusCode
     }
-    if (!dostup()){
-        return CodeExecute.FORBIDDEN.statusCode
+    if (!isResourceAccess(login, role, resource)){
+        return CodeExecute.FORBIDDEN
     }
     if (ds != null && de != null && vol != null){
         if (dateValidate(ds, de) || volValidate(vol)){
@@ -233,14 +215,11 @@ fun volValidate(vol: String): Boolean {
 
 * Метод: Имеет ли пользователь доступ к ресурсу
 ```kotlin
-fun dostup(): Boolean {
+private fun isResourceAccess(login: String, role: String, resourse: String): Boolean {
+    val userId = (dataBase.getUserByLogin(login) as User).id
 
+    return dataBase.getResourses().any {it.userId == userId && it.role.name == role && Utils.isResource(resourse, it.resource)}
 }
-```
-
-* Метод: TODO ...
-```kotlin
-
 ```
 
 
@@ -274,7 +253,6 @@ fun getHash(sourse: String): String = MessageDigest.getInstance("MD5").digest(so
 
 * Метод: Переводит в строку
 ```kotlin
-// TODO
 fun ByteArray.toStr(): String = MessageDigest.getInstance("MD5").digest(sourse.toByteArray()).joinToString("") { "%02x".format(it) }
 ``` 
 
@@ -284,7 +262,6 @@ fun ByteArray.toStr(): String = MessageDigest.getInstance("MD5").digest(sourse.t
 * Метод: Парсит строку и возвращает объект Аргументов
 ```kotlin
 fun parseArguments(args: Array<String>): Arguments {
-
     val parser = ArgParser("Authorization project")
 
     val login by parser.option(ArgType.String, shortName = "login", description = "Input login")
@@ -298,7 +275,6 @@ fun parseArguments(args: Array<String>): Arguments {
     parser.parse(args)
 
     return Arguments(login, password, role, resourse, ds, de, vol)
-
 }
 ```
 
@@ -396,13 +372,11 @@ fun main(args: Array<String>){
         if (arguments.role != null && arguments.resourse != null){
             // Провести авторизацию
             exitCode = AuthorizeProvider.authorize(arguments.login, arguments.password, arguments.role, arguments.resourse, arguments.ds, arguments.de, arguments.vol)
-            // TODO ...
         }
     }
     
     System.exit(exitCode)
 }
-
 
 ```
 
