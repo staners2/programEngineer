@@ -1,10 +1,15 @@
+![GitHub language count](https://img.shields.io/github/languages/count/staners2/programEngineer)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/staners2/programEngineer)
+![GitHub top language](https://img.shields.io/github/languages/top/staners2/programEngineer)
+![example workflow](https://github.com/staners2/programEngineer/actions/workflows/main.yaml/badge.svg)
+
 # Ресурсы
 * [PAGE SITE](https://staners2.github.io/programEngineer/)
 
-* [ROADMAP1](https://staners2.github.io/programEngineer/PLAN)
-* [ROADMAP2](https://staners2.github.io/programEngineer/Roadmap2)
+* [ROADMAP1](./PLAN.md)
+* [ROADMAP2](./Roadmap2.md)
 
-* [Ретроспектива ROADMAP1](https://staners2.github.io/programEngineer/RETRO1)
+* [Ретроспектива ROADMAP1](./RETRO1.md)
 
 # Инструкция
 
